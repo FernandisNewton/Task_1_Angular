@@ -1,58 +1,98 @@
-
 <div class="container">
-   
-    <div [style.visibility]="isVisible" class="form_modal">
-        <h3>Create new task</h3>
-        <form>
-          <input
-            class="task_input"
-            type="text"
-            id="task"
-            name="task"
-            placeholder="Task name"
-            required
-          />
-          <div class="date_container">
-            <label>Color</label>
-            <input class="card_color" type="color" name="card_color" />
-            <label>Date</label>
-            <input type="date" required name="date" class="date_input" />
+  <div [style.visibility]="isVisible" class="form_modal">
+    <h3>Create new task</h3>
+    <form [formGroup]="newTaskForm">
+      <input
+        class="task_input"
+        type="text"
+        id="task"
+        name="task"
+        placeholder="Task name"
+        formControlName="taskName"
+      />
+      <div class="date_container">
+        <label>Color</label>
+        <input
+          class="card_color"
+          type="color"
+          name="card_color"
+          formControlName="color"
+        />
+        <label>Date</label>
+        <input
+          type="date"
+          required
+          name="date"
+          class="date_input"
+          formControlName="date"
+        />
+      </div>
+
+      <input
+        multiple
+        size="5"
+        type="text"
+        class="tag_input"
+        name="tag"
+        placeholder="Enter Tag"
+        formControlName="tags"
+      />
+      <button (click)="createNewTask()" class="form-button">Create task</button>
+    </form>
+  </div>
+  <div class="left_container">
+    <div class="task_header">
+      <h1>Tasks</h1>
+      <button (click)="toggleVisibility()" class="btn">Create task</button>
+    </div>
+    <ul
+      class="cardContainer tasks"
+      (dragover)="$event.preventDefault()"
+      (dragenter)="$event.preventDefault()"
+      (drop)="dropMethod($event)"
+    >
+      <div *ngFor="let task of tasks">
+        <div
+          class="card"
+          draggable="true"
+          (dragstart)="dragStart(task, $event)"
+          (dragend)="dragEnd($event)"
+        >
+          <div class="card__color"></div>
+          <div class="card__content">
+            <h2>{{ task.title }}</h2>
+            <p class="date">{{ task.date | date }}</p>
           </div>
-    
-          <input
-            multiple
-            size="5"
-            type="text"
-            class="tag_input"
-            name="tag"
-            placeholder="Enter Tag"
-          />
-          <button class="form-button">Create task</button>
-        </form>
+          <div class="tag_div">
+            <div *ngFor="let tag of task.tag" class="tag">{{ tag }}</div>
+          </div>
+        </div>
       </div>
-    <div class="left_container">
-      <div class="task_header">
-        <h1>Tasks</h1>
-        <button (click)="toggleVisibility()" class="btn">Create task</button>
-      </div>
-      <ul class="cardContainer tasks">
-        <div *ngFor="let task of taskData">
-          <div class="card" draggable="true">
-            <div class="card__color"></div>
-            <div class="card__content">
-              <h2>{{task.title}}</h2>
-              <p class="date">{{task.date}}</p>
-            </div>
-            <div class="tag_div">
-              <div *ngFor="let tag of task.tag" class="tag">{{tag}}</div>
+    </ul>
+  </div>
+  <div class="divider"></div>
+  <div class="right_container">
+    <h1>Completed tasks</h1>
+    <ul
+     class="cardContainer completed_tasks"
+     (dragover)="$event.preventDefault()"
+      (dragenter)="$event.preventDefault()"
+      (drop)="dropMethod($event)"
+     >
+      <div *ngFor="let completed_task of completedTasks">
+        <div class="card" draggable="true">
+          <div class="card__color"></div>
+          <div class="card__content">
+            <h2>{{ completed_task.title }}</h2>
+            <p class="date">{{ completed_task.date | date }}</p>
+          </div>
+          <div class="tag_div">
+            <div *ngFor="let tag of completed_task.tag" class="tag">
+              {{ tag }}
             </div>
           </div>
         </div>
-      </ul>
-    </div>
-    <div class="divider"></div>
-    <div class="right_container">
-      <h1>Completed tasks</h1>
-      <ul class="cardContainer completed_tasks"></ul>
-    </div>
+      </div>
+    </ul>
   </div>
+</div>
