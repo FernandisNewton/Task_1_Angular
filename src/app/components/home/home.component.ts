@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TaskDataService } from 'src/app/services/task-data.service';
 import { Task } from 'src/app/Model/task';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-home',
@@ -63,6 +64,8 @@ export class HomeComponent implements OnInit {
     });
     this.taskDataService.saveData('tasks', JSON.stringify(this.tasks));
     this.isVisible = 'hidden';
+    
+    this.newTaskForm.reset();
   }
 
   dragStart(task: Task, event: any): void {
