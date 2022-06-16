@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TaskDataService } from 'src/app/services/task-data.service';
 import { Task } from 'src/app/Model/task';
 import { FormGroup, FormControl } from '@angular/forms';
- 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -41,7 +41,6 @@ export class HomeComponent implements OnInit {
     tasks.splice(
       tasks.findIndex(function (i: any) {
         console.log(i.id);
-        
         return i.id === id;
       }),
       1
@@ -50,9 +49,13 @@ export class HomeComponent implements OnInit {
     this.taskDataService.saveData(key, JSON.stringify(tasks));
   }
 
+  generateId(): string {
+    return 'id' + new Date().getTime();
+  }
+
   createNewTask(): void {
     this.tasks?.push({
-      id: "id" + new Date().getTime(),
+      id: this.generateId(),
       title: this.newTaskForm.value.taskName || '',
       date: this.newTaskForm.value.date || '',
       color: this.newTaskForm.value.color || '',
@@ -67,13 +70,6 @@ export class HomeComponent implements OnInit {
       event.path[0].style.display = 'none';
     }, 0);
     this.currentDraggedCard = task;
-  
-    // if (event.path[2].className === 'cardContainer tasks') {
-      
-    
-    // }else if (event.path[2].className === 'cardContainer completed_tasks') {
-    //   this.deleteTask(this.currentDraggedCard.id,this.completedTasks,"completed_tasks");
-    // }
   }
 
   dragEnd(event: any): void {
@@ -84,7 +80,7 @@ export class HomeComponent implements OnInit {
     if (event.path[0].className === 'cardContainer tasks') {
       this.tasks?.push(this.currentDraggedCard);
       this.taskDataService.saveData('tasks', JSON.stringify(this.tasks));
-    
+
       this.deleteTask(
         this.currentDraggedCard.id,
         this.completedTasks,

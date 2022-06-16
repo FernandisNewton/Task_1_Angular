@@ -58,7 +58,7 @@
           (dragstart)="dragStart(task, $event)"
           (dragend)="dragEnd($event)"
         >
-          <div class="card__color"></div>
+          <div class="card__color" [style.background-color] = "task.color"></div>
           <div class="card__content">
             <h2>{{ task.title }}</h2>
             <p class="date">{{ task.date | date }}</p>
@@ -80,8 +80,11 @@
       (drop)="dropMethod($event)"
      >
       <div *ngFor="let completed_task of completedTasks">
-        <div class="card" draggable="true">
-          <div class="card__color"></div>
+        <div class="card" 
+        (dragstart)="dragStart(completed_task, $event)"
+        (dragend)="dragEnd($event)"
+        draggable="true">
+          <div class="card__color" [style.background-color] = "completed_task.color"></div>
           <div class="card__content">
             <h2>{{ completed_task.title }}</h2>
             <p class="date">{{ completed_task.date | date }}</p>
