@@ -11,6 +11,7 @@ import { ThisReceiver } from '@angular/compiler';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  
   newTaskForm = new FormGroup({
     taskName: new FormControl<string>(''),
     color: new FormControl<string>(''),
@@ -24,7 +25,7 @@ export class HomeComponent implements OnInit {
   isVisible: boolean = false;
   currentDraggedCard: any = null;
   display: string = 'block';
-  prevContainer: string = '';
+  previousContainer: string = '';
 
   ngOnInit(): void {
     this.tasks = JSON.parse(this.taskDataService.getData('tasks')) || [];
@@ -81,7 +82,7 @@ export class HomeComponent implements OnInit {
       event.path[0].style.display = 'none';
     }, 0);
     this.currentDraggedCard = task;
-    this.prevContainer = event.path[2].id;
+    this.previousContainer = event.path[2].id;
   }
 
   dragEnd(event: any): void {
@@ -89,7 +90,7 @@ export class HomeComponent implements OnInit {
   }
 
   dropMethod(event: any): void {
-    if (event.path[0].id === 'tasks' && this.prevContainer !== 'tasks') {
+    if (event.path[0].id === 'tasks' && this.previousContainer !== 'tasks') {
       this.tasks?.push(this.currentDraggedCard);
       this.taskDataService.saveData('tasks', JSON.stringify(this.tasks));
 
@@ -100,7 +101,7 @@ export class HomeComponent implements OnInit {
       );
     } else if (
       event.path[0].id === 'completed_tasks' &&
-      this.prevContainer !== 'completed_tasks'
+      this.previousContainer !== 'completed_tasks'
     ) {
       this.completedTasks?.push(this.currentDraggedCard);
       this.taskDataService.saveData(

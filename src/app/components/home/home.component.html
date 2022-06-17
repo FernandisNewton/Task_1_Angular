@@ -2,17 +2,27 @@
   <div [style.visibility]="isVisible ? 'visible' : 'hidden'" class="form_modal">
     <div class="form_header">
       <h2>Create new task</h2>
-      <mat-icon aria-hidden="false" style="cursor: pointer;" (click)="isVisible=false" 
-      >close</mat-icon
-    >
+      <mat-icon
+        aria-hidden="false"
+        style="cursor: pointer"
+        (click)="isVisible = false"
+        >close</mat-icon
+      >
     </div>
-   
+
     <form [formGroup]="newTaskForm">
       <mat-form-field class="inputFields" appearance="fill">
         <mat-label>Task Name</mat-label>
-        <input matInput placeholder="Task name" name="task" type="text" formControlName="taskName" required>
+        <input
+          matInput
+          placeholder="Task name"
+          name="task"
+          type="text"
+          formControlName="taskName"
+          required
+        />
       </mat-form-field>
-     
+
       <div class="date_container">
         <label>Color</label>
         <input
@@ -21,7 +31,7 @@
           name="card_color"
           formControlName="color"
         />
-        
+
         <label>Date* </label>
         <input
           type="date"
@@ -31,12 +41,20 @@
           formControlName="date"
         />
       </div>
-       
+
       <mat-form-field class="inputFields" appearance="fill">
         <mat-label>Enter Tag</mat-label>
-        <input matInput placeholder="Task name"  name="tag" placeholder="Enter Tag"   type="text"  formControlName="tags" required>
+        <input
+          matInput
+          placeholder="Task name"
+          name="tag"
+          placeholder="Enter Tag"
+          type="text"
+          formControlName="tags"
+          required
+        />
       </mat-form-field>
-   
+
       <button (click)="createNewTask()" class="form-button">Create task</button>
     </form>
   </div>
