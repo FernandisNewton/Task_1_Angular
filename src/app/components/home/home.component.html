@@ -1,15 +1,18 @@
 <div class="container">
-  <div [style.visibility]="isVisible" class="form_modal">
-    <h3>Create new task</h3>
+  <div [style.visibility]="isVisible ? 'visible' : 'hidden'" class="form_modal">
+    <div class="form_header">
+      <h2>Create new task</h2>
+      <mat-icon aria-hidden="false" style="cursor: pointer;" (click)="isVisible=false" 
+      >close</mat-icon
+    >
+    </div>
+   
     <form [formGroup]="newTaskForm">
-      <input
-        class="task_input"
-        type="text"
-        id="task"
-        name="task"
-        placeholder="Task name"
-        formControlName="taskName"
-      />
+      <mat-form-field class="inputFields" appearance="fill">
+        <mat-label>Task Name</mat-label>
+        <input matInput placeholder="Task name" name="task" type="text" formControlName="taskName" required>
+      </mat-form-field>
+     
       <div class="date_container">
         <label>Color</label>
         <input
@@ -18,7 +21,8 @@
           name="card_color"
           formControlName="color"
         />
-        <label>Date</label>
+        
+        <label>Date* </label>
         <input
           type="date"
           required
@@ -27,16 +31,12 @@
           formControlName="date"
         />
       </div>
-
-      <input
-        multiple
-        size="5"
-        type="text"
-        class="tag_input"
-        name="tag"
-        placeholder="Enter Tag"
-        formControlName="tags"
-      />
+       
+      <mat-form-field class="inputFields" appearance="fill">
+        <mat-label>Enter Tag</mat-label>
+        <input matInput placeholder="Task name"  name="tag" placeholder="Enter Tag"   type="text"  formControlName="tags" required>
+      </mat-form-field>
+   
       <button (click)="createNewTask()" class="form-button">Create task</button>
     </form>
   </div>
@@ -50,6 +50,7 @@
       (dragover)="$event.preventDefault()"
       (dragenter)="$event.preventDefault()"
       (drop)="dropMethod($event)"
+      id="tasks"
     >
       <div *ngFor="let task of tasks">
         <div
@@ -57,14 +58,22 @@
           draggable="true"
           (dragstart)="dragStart(task, $event)"
           (dragend)="dragEnd($event)"
+          id="completed_tasks"
         >
-          <div class="card__color" [style.background-color] = "task.color"></div>
+          <div class="card__color" [style.background-color]="task.color"></div>
           <div class="card__content">
             <h2>{{ task.title }}</h2>
             <p class="date">{{ task.date | date }}</p>
           </div>
           <div class="tag_div">
-            <div *ngFor="let tag of task.tag" class="tag">{{ tag }}</div>
+            <div class="tag_section">
+              <div *ngFor="let tag of task.tag" class="tag">{{ tag }}</div>
+            </div>
+            <div (click)="deleteTask(task.id, tasks, 'tasks')" class="icon">
+              <mat-icon aria-hidden="false" aria-label="Example home icon"
+                >delete</mat-icon
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -74,24 +83,42 @@
   <div class="right_container">
     <h1>Completed tasks</h1>
     <ul
-     class="cardContainer completed_tasks"
-     (dragover)="$event.preventDefault()"
+      class="cardContainer completed_tasks"
+      (dragover)="$event.preventDefault()"
       (dragenter)="$event.preventDefault()"
       (drop)="dropMethod($event)"
-     >
-      <div *ngFor="let completed_task of completedTasks">
-        <div class="card" 
-        (dragstart)="dragStart(completed_task, $event)"
-        (dragend)="dragEnd($event)"
-        draggable="true">
-          <div class="card__color" [style.background-color] = "completed_task.color"></div>
+      id="completed_tasks"
+    >
+      <div *ngFor="let completedTask of completedTasks">
+        <div
+          class="card"
+          (dragstart)="dragStart(completedTask, $event)"
+          (dragend)="dragEnd($event)"
+          draggable="true"
+        >
+          <div
+            class="card__color"
+            [style.background-color]="completedTask.color"
+          ></div>
           <div class="card__content">
-            <h2>{{ completed_task.title }}</h2>
-            <p class="date">{{ completed_task.date | date }}</p>
+            <h2>{{ completedTask.title }}</h2>
+            <p class="date">{{ completedTask.date | date }}</p>
           </div>
           <div class="tag_div">
-            <div *ngFor="let tag of completed_task.tag" class="tag">
-              {{ tag }}
+            <div class="tag_section">
+              <div *ngFor="let tag of completedTask.tag" class="tag">
+                {{ tag }}
+              </div>
+            </div>
+            <div
+              (click)="
+                deleteTask(completedTask.id, completedTasks, 'completed_tasks')
+              "
+              class="icon"
+            >
+              <mat-icon aria-hidden="false" aria-label="Example home icon"
+                >delete</mat-icon
+              >
             </div>
           </div>
         </div>
